@@ -27,7 +27,12 @@ app.post('/download', (req, res) => {
     res.setHeader('Content-Disposition', 'attachment; filename="video.mp4"')
     res.setHeader('Content-Type', 'video/mp4')
 
-    const stream = ytDlp.execStream([url, '-o', '-'])
+  const stream = ytDlp.execStream([
+    url,
+    '--extractor-args', 'youtube:player_client=android',
+    '--no-check-certificate',
+    '-o', '-'
+])
 
     stream.on('error', (err) => {
         console.error('yt-dlp error:', err.message)
