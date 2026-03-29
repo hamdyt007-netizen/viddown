@@ -4,28 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <title>VidDown</title>
 </head>
 
 <body>
 
+    <div class="noise"></div>
+
     <header>
-        <h1 class="logo">🎬 VidDown</h1>
+        <span class="logo">▶ VIDDOWN</span>
+        <span class="tagline">yt downloader</span>
     </header>
 
     <main>
-        <div class="container">
-            <h2>Download Any Video</h2>
-            <p class="subtitle">Paste a YouTube link and hit Download</p>
+        <div class="hero-text">
+            <h1>Grab any<br><span class="accent">YouTube</span><br>video.</h1>
+        </div>
 
-            <div class="form">
-                <input type="text" id="videoUrl" placeholder="Enter video URL here...">
-                <button id="downloadBtn">Download</button>
+        <div class="card">
+            <div class="card-label">PASTE URL</div>
+            <div class="input-row">
+                <input type="text" id="videoUrl" placeholder="https://youtube.com/watch?v=..." autocomplete="off"
+                    spellcheck="false">
+                <button id="fetchBtn">Fetch →</button>
             </div>
 
-            <div class="progress-bar-container">
+            <div class="format-section" id="formatSection" style="display:none">
+                <div class="card-label" style="margin-top: 1.5rem;">SELECT FORMAT</div>
+                <div class="select-wrapper">
+                    <select id="formatSelect">
+                        <option value="">Loading formats...</option>
+                    </select>
+                    <span class="select-arrow">↕</span>
+                </div>
+                <button id="downloadBtn" class="download-btn">⬇ Download</button>
+            </div>
+
+            <div class="progress-bar-container" id="progressWrap" style="display:none">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
 
