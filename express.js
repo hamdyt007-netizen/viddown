@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'frontend')))
 
 app.post('/download', (req, res) => {
     const { url, formatId } = req.body
-    if (!url || !formatId) {                    // ✅ add this
+    if (!url || !formatId) {
         return res.status(400).json({ error: 'URL and format are required' })
     }
 
@@ -25,6 +25,7 @@ app.post('/download', (req, res) => {
     const stream = ytDlp.execStream([
         url,
         '--format', formatId,
+        '--geo-bypass',            // ✅ added
         '--no-check-certificate',
         '-o', '-'
     ])
@@ -38,9 +39,9 @@ app.post('/download', (req, res) => {
 
     stream.pipe(res)
 })
+
 app.post('/formats', async (req, res) => {
     const url = req.body.url
-
 
     if (!url) {
         return res.status(400).json({ error: 'URL is required' })
@@ -52,9 +53,16 @@ app.post('/formats', async (req, res) => {
     }
 
     try {
-        const info = await ytDlp.getVideoInfo(url)
+        const stdout = await ytDlp.execPromise([   // ✅ switched to execPromise
+            url,
+            '--dump-json',
+            '--geo-bypass',                        // ✅ added
+            '--no-check-certificate'
+        ])
+
+        const info = JSON.parse(stdout)            // ✅ manually parse the JSON
         const formats = info.formats
-            .filter(f => f.ext === 'mp4' && f.resolution && f.fps)  // ✅ only mp4
+            .filter(f => f.ext === 'mp4' && f.resolution && f.fps)
             .map(f => ({
                 format_id: f.format_id,
                 ext: f.ext,
@@ -68,6 +76,6 @@ app.post('/formats', async (req, res) => {
     }
 })
 
-app.listen(8000, () => {
-    console.log("Server started on port 8000")
+app.listen(process.env.PORT || 8000, () => {
+    console.log("Server started")
 })
